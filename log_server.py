@@ -1,4 +1,4 @@
-import discord,traceback,getpass
+import discord,traceback,getpass,os
 from discord.ext import commands
 
 async def send_error(self,error):
