@@ -25,27 +25,31 @@ async def send_error(self,error):
 class MyBot(commands.Bot):
     def __init__(self, command_prefix):
         super().__init__(command_prefix)
-
         self.remove_command('help')
-        for cog in ['mmo.bot','mmo.main']:
-            self.load_extension(cog)
-
+        
     async def on_ready(self):
-        for members_in_log in self.get_guild(634702862257094656).members:
-            nitro_log_server = discord.utils.get(self.get_guild(634702862257094656).roles, id=634703387119845406)
-            admin_log_server = discord.utils.get(self.get_guild(634702862257094656).roles, id=634703386473922580)
-            if nitro_log_server in members_in_log.roles and not admin_log_server in members_in_log.roles:
-                for members_official in self.get_guild(337524390155780107).members:
-                    nitro_check2 = discord.utils.get(self.get_guild(337524390155780107).roles, id=623842965747400705)
-                    if members_in_log == members_official and not nitro_check2 in members_official.roles:
-                        await members_in_log.remove_roles(nitro_log_server)
+        try:
+            for members_in_log in self.get_guild(634702862257094656).members:
+                nitro_log_server = discord.utils.get(self.get_guild(634702862257094656).roles, id=634703387119845406)
+                admin_log_server = discord.utils.get(self.get_guild(634702862257094656).roles, id=634703386473922580)
+                if nitro_log_server in members_in_log.roles and not admin_log_server in members_in_log.roles:
+                    for members_official in self.get_guild(337524390155780107).members:
+                        nitro_check2 = discord.utils.get(self.get_guild(337524390155780107).roles, id=623842965747400705)
+                        if members_in_log == members_official and not nitro_check2 in members_official.roles:
+                            await members_in_log.remove_roles(nitro_log_server)
 
-        await self.change_presence(
-            activity=discord.Game(
-                name="TAO公式鯖と接続中 | &&help"
+            await self.change_presence(
+                activity=discord.Game(
+                    name="TAO公式鯖と接続中 | &&help"
+                )
             )
-        )
             
+            for cog in ['mmo.bot','mmo.main']:
+                self.load_extension(cog)
+                
+        except Exception as e:
+            await send_error(self, e)
+
     async def on_member_join(self,member):
         try:
             if not member.guild.id == 634702862257094656:
